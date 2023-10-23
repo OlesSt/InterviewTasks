@@ -30,6 +30,7 @@ public:
 
     // Must overload operator-> and operator* to call class methods
     T* operator->() { return m_ptr; }
+    T& operator*()  { return *m_ptr; }
 
     ~MySmartPointer<T>() { delete m_ptr; }                     // must have destructor
 
