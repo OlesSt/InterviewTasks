@@ -33,6 +33,16 @@ public:
 
     MySharedPointer& operator=(const MySharedPointer<T>& copyObj)   // Overload operaotor= as copy : copy obj data and uprate counter
     {
+        if (this != copyObj)                    // check obj doesn't point to itself
+        {
+            if (m_count && --(*m_count) == 0)   // check this is the last owner of shared data
+            {
+                delete m_ptr;                   // delete dynamicly allocated ptr
+                delete m_count;
+            }
+        }
+
+
         m_ptr   = copyObj.m_ptr;
         m_count = copyObj.m_count;
         if (m_count) {*(m_count)++;}
@@ -41,6 +51,15 @@ public:
 
     MySharedPointer& operator=(const MySharedPointer<T>&& moveObj)   // Overload operaotor= as move : move obj data and kill it
     {
+        if (this != moveObj)                    // check obj doesn't point to itself
+        {
+            if (m_count && --(*m_count) == 0)   // check this is the last owner of shared data
+            {
+                delete m_ptr;                   // delete dynamicly allocated ptr
+                delete m_count;
+            }
+        }
+
         m_ptr   = moveObj.m_ptr;
         m_count = moveObj.m_count;
 
@@ -89,13 +108,15 @@ private:
 
 void runMySharedPointer()
 {
+    std::cout << "\n ----- Test Create Object 01" << std::endl;
     MySharedPointer<TestClass> obj01 (new TestClass("obj", 1));
     obj01->doStuff();
 
-
+    std::cout << "\n ----- Test Move Constructor Object 02" << std::endl;
     MySharedPointer<TestClass> obj02 (std::move(obj01));
     obj02->doStuff();
 
+    std::cout << "\n ----- Test Operator= as Copy Objectr 03" << std::endl;
     MySharedPointer<TestClass> &obj03 = obj02;
     obj03->doStuff();
 }
