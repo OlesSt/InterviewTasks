@@ -17,6 +17,8 @@ add_executable(InterviewTasks
 
   mysmartpointer.h
   mysharedpointer.h
+
+  task.h
 )
 target_link_libraries(InterviewTasks Qt${QT_VERSION_MAJOR}::Core)
 
